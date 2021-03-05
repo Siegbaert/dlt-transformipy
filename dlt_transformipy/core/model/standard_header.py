@@ -45,6 +45,9 @@ STANDARD_HEADER_BYTE_SIZE = (
     + STANDARD_HEADER_TIMESTAMP_BYTE_SIZE
 )
 
+logger = logging.getLogger("dlt-transformipy")
+logger.setLevel(logging.INFO)
+
 
 class StandardHeader(object):
     header_type = None
@@ -56,7 +59,7 @@ class StandardHeader(object):
 
     def __init__(self, dlt_message_hex, start_byte_pointer):
         standard_header_hex = dlt_message_hex[
-            start_byte_pointer : STANDARD_HEADER_BYTE_SIZE * 2
+            start_byte_pointer : start_byte_pointer + STANDARD_HEADER_BYTE_SIZE * 2
         ]
 
         # StandardHeader.header_type

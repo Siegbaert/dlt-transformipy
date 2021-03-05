@@ -38,7 +38,7 @@ class ExtendedHeader(object):
 
     def __init__(self, dlt_message_hex, start_byte_pointer):
         extended_header_hex = dlt_message_hex[
-            start_byte_pointer : EXTENDED_HEADER_BYTE_SIZE * 2
+            start_byte_pointer : start_byte_pointer + EXTENDED_HEADER_BYTE_SIZE * 2
         ]
         self.message_info = ExtendedHeaderMessageInfo(extended_header_hex)
         self.noar = self.__extract_number_of_arguments(extended_header_hex)

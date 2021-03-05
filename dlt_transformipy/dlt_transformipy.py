@@ -22,6 +22,7 @@ from dlt_transformipy.core.model.extended_header import ExtendedHeader
 from dlt_transformipy.core.model.payload import Payload
 
 logger = logging.getLogger("dlt-transformipy")
+logger.setLevel(logging.INFO)
 
 # BLOCK SIZE USED FOR READING DLT
 READ_DLT_BLOCK_SIZE = 32000
@@ -193,14 +194,17 @@ class DLTMessage(object):
     def __init__(self, dlt_message_hex, is_storaged_file):
         # Always points to the starting byte of the next info to read from dlt_message_hex
         start_byte_pointer = 0
+        logger.info("StartBytePointer: {}".format(start_byte_pointer))
         # Read the storage-header, if applicable
         if is_storaged_file:
+            logger.info("Reading StorageHeader")
             self.storage_header = StorageHeader(dlt_message_hex, start_byte_pointer)
             # Update the start byte pointer (move it to the end of STORAGE_HEADER)
             start_byte_pointer += self.storage_header.get_byte_size() * 2
 
-        logger.log("StartByte: {}".format(start_byte_pointer))
+        logger.info("StartBytePointer: {}".format(start_byte_pointer))
         # Read the standard-header
+        logger.info("Reading StandardHeader")
         self.standard_header = StandardHeader(dlt_message_hex, start_byte_pointer)
         # Update the start byte pointer (move it to the end of STANDARD_HEADER)
         start_byte_pointer += self.standard_header.get_byte_size() * 2

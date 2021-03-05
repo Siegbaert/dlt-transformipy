@@ -38,7 +38,7 @@ class StorageHeader(object):
 
     def __init__(self, dlt_message_hex, start_byte_pointer):
         storage_header_hex = dlt_message_hex[
-            start_byte_pointer : STORAGE_HEADER_BYTE_SIZE * 2
+            start_byte_pointer : start_byte_pointer + STORAGE_HEADER_BYTE_SIZE * 2
         ]
         self.timestamp_seconds = self.__extract_timestamp_seconds(storage_header_hex)
         self.timestamp_microseconds = self.__extract_timestamp_microseconds(

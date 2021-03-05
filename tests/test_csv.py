@@ -18,13 +18,16 @@ import os
 from dlt_transformipy import dlt_transformipy
 
 dlt_test_file_path = "tests/example_files/testfile.dlt"
-csv_file_path = "tests/example_files/testfile_new.csv"
+test_output_file_path = "tests/output"
+csv_output_file_path = "tests/output/testfile.csv"
 
 
 def setup_module(module):
     """ setup any state specific to the execution of the given module."""
-    if os.path.exists(csv_file_path):
-        os.remove(csv_file_path)
+    if not os.path.exists(test_output_file_path):
+        os.makedirs(test_output_file_path)
+    elif os.path.exists(csv_output_file_path):
+        os.remove(csv_output_file_path)
 
 
 def test_csv():
@@ -32,5 +35,5 @@ def test_csv():
     assert (
         dlt_file is not None
     ), "dlt_file is None --> DLT File could not be loaded properly!"
-    dlt_file.as_csv(csv_file_path)
-    assert os.path.exists(csv_file_path) == 1, "testfile.csv does not exist!"
+    dlt_file.as_csv(csv_output_file_path)
+    assert os.path.exists(csv_output_file_path) == 1, "testfile.csv does not exist!"
