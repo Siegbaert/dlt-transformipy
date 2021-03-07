@@ -25,27 +25,31 @@ STORAGE_FILE_HEADER_BYTE_SIZE = 4
 DLT_STORAGE_HEADER_IDENTIFIER_HEX = "444c5401"
 
 
-class DLTFile(object):
-    __dlt_messages = None
+class DLTFile():
     is_storaged_file = False
+
+    __dlt_messages = None
+    __dlt_file_path = None
 
     def __init__(self, dlt_file_path):
         self.__dlt_messages = list()
-        dlt_file_descriptor = open(dlt_file_path, "rb")
-        self.is_storaged_file = self._check_if_storage_file(dlt_file_descriptor)
-        self._create_dlt_messages(dlt_file_descriptor)
-        dlt_file_descriptor.close()
-        logger.info(
-            "Number of DLT-Messages in DLT File {}: {}".format(
-                dlt_file_path, len(self.__dlt_messages)
-            )
-        )
+        self.__dlt_file_path = dlt_file_path
 
     def get_messages(self) -> "list(DLTMessage)":
-        """Get a list of all DLTMessages | Reads in complete file --> tough on memory
+        """Get a list of all DLTMessages (reads in the whole DLT file at once --> tough on memory)
         :returns: List of all DLTMessages
         :rtype: DLTMessage
         """
+        if self.__dlt_messages is None or not len(self.__dlt_messages):
+            dlt_file_descriptor = open(self.__dlt_file_path, "rb")
+            self.is_storaged_file = self._check_if_storage_file(dlt_file_descriptor)
+            self._create_dlt_messages(dlt_file_descriptor)
+            dlt_file_descriptor.close()
+            logger.info(
+                "Number of DLT-Messages in DLT File {}: {}".format(
+                    self.__dlt_file_path, len(self.__dlt_messages)
+                )
+            )
         return self.__dlt_messages
 
     def clean_up(self):

@@ -29,7 +29,7 @@ STORAGE_HEADER_BYTE_SIZE = (
 )
 
 
-class StorageHeader(object):
+class StorageHeader():
     timestamp_seconds = 0
     timestamp_microseconds = 0
     ecu_id = None

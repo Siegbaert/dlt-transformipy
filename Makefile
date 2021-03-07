@@ -6,9 +6,9 @@ install:
 		python3 -m pip install -r requirements.txt
 
 test:
-	python3 -m pytest tests/*.py
+	python3 -m pytest -s tests/*.py
 
 lint:
-	python3 -m pylint dlt_transformipy/dlt_transformipy.py
+	python3 -m pylint dlt_transformipy
 
 all: install lint test

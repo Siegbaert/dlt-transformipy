@@ -46,7 +46,7 @@ STANDARD_HEADER_BYTE_SIZE = (
 )
 
 
-class StandardHeader(object):
+class StandardHeader():
     header_type = None
     message_counter = 0
     length = 0
@@ -154,7 +154,7 @@ class StandardHeader(object):
         return standard_header_dynamic_byte_size
 
 
-class StandardHeaderType(object):
+class StandardHeaderType():
     use_extended_header = False
     most_significant_byte_first = False
     with_ecu_id = False

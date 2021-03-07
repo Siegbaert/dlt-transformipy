@@ -13,8 +13,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import logging
-
 from dlt_transformipy.core.helpers import isKthBitSet, hex_str_to_utf8, hex_str_to_uint8
 
 # EXTENDED HEADER BYTE SIZES
@@ -30,7 +28,7 @@ EXTENDED_HEADER_BYTE_SIZE = (
 )
 
 
-class ExtendedHeader(object):
+class ExtendedHeader:
     message_info = None
     noar = None
     apid = None
@@ -53,20 +51,23 @@ class ExtendedHeader(object):
             else 0
         )
 
-    def __extract_application_id(self, extended_header_hex):
+    @staticmethod
+    def __extract_application_id(extended_header_hex):
         return hex_str_to_utf8(extended_header_hex[4:12], errors="ignore").rstrip("\0")
 
-    def __extract_context_id(self, extended_header_hex):
+    @staticmethod
+    def __extract_context_id(extended_header_hex):
         return hex_str_to_utf8(extended_header_hex[12:20], errors="ignore").rstrip("\0")
 
     ###
     # Getters
     ###
-    def get_byte_size(self):
+    @staticmethod
+    def get_byte_size():
         return EXTENDED_HEADER_BYTE_SIZE
 
 
-class ExtendedHeaderMessageInfo(object):
+class ExtendedHeaderMessageInfo:
     verbose = False
     message_type = None
     message_type_info = None
@@ -84,11 +85,14 @@ class ExtendedHeaderMessageInfo(object):
             extended_header_message_info_int
         )
 
-    def __extract_verbose(self, extended_header_message_info_int):
+    @staticmethod
+    def __extract_verbose(extended_header_message_info_int):
         return isKthBitSet(extended_header_message_info_int, 0)
 
-    def __extract_message_type(self, extended_header_message_info_int):
+    @staticmethod
+    def __extract_message_type(extended_header_message_info_int):
         return extended_header_message_info_int & 0b00001110
 
-    def __extract_message_type_info(self, extended_header_message_info_int):
+    @staticmethod
+    def __extract_message_type_info(extended_header_message_info_int):
         return extended_header_message_info_int & 0b11110000

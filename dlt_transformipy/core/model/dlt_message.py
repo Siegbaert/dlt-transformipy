@@ -19,7 +19,7 @@ from dlt_transformipy.core.model.extended_header import ExtendedHeader
 from dlt_transformipy.core.model.payload import Payload
 
 
-class DLTMessage(object):
+class DLTMessage:
     storage_header = None
     standard_header = None
     extended_header = None

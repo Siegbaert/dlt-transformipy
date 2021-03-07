@@ -58,7 +58,7 @@ TYPE_INFO_SCOD_ASCII_BITMASK = 0b000
 TYPE_INFO_SCOD_UTF8_BITMASK = 0b001
 
 
-class Payload(object):
+class Payload():
     # List like access to arguments
 
     _payload_encoded = None

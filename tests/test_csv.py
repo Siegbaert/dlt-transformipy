@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import dlt_transformipy
 import os
+import time
 from dlt_transformipy import dlt_transformipy
 from dlt_transformipy.core import transformation_utils
 
@@ -36,5 +37,6 @@ def test_csv():
     assert (
         dlt_file is not None
     ), "dlt_file is None --> DLT File could not be loaded properly!"
+    dlt_file.get_messages()
     transformation_utils.as_csv(dlt_file, csv_output_file_path)
     assert os.path.exists(csv_output_file_path) == 1, "testfile.csv does not exist!"
