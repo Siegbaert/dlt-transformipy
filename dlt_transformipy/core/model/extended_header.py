@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import logging
 
-from dlt_transformipy.helpers import isKthBitSet, hex_str_to_utf8, hex_str_to_uint8
+from dlt_transformipy.core.helpers import isKthBitSet, hex_str_to_utf8, hex_str_to_uint8
 
 # EXTENDED HEADER BYTE SIZES
 EXTENDED_HEADER_MESSAGE_INFO_BYTE_SIZE = 1

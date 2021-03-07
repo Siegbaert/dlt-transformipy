@@ -16,6 +16,7 @@
 import dlt_transformipy
 import os
 from dlt_transformipy import dlt_transformipy
+from dlt_transformipy.core import transformation_utils
 
 dlt_test_file_path = "tests/example_files/testfile.dlt"
 test_output_file_path = "tests/output"
@@ -35,5 +36,5 @@ def test_csv():
     assert (
         dlt_file is not None
     ), "dlt_file is None --> DLT File could not be loaded properly!"
-    dlt_file.as_csv(csv_output_file_path)
+    transformation_utils.as_csv(dlt_file, csv_output_file_path)
     assert os.path.exists(csv_output_file_path) == 1, "testfile.csv does not exist!"

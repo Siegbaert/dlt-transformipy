@@ -13,9 +13,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import logging
+from dlt_transformipy import logger
 
-from dlt_transformipy.helpers import (
+from dlt_transformipy.core.helpers import (
     hex_str_to_ascii,
     hex_str_to_utf8,
     hex_str_to_int32,
@@ -57,8 +57,6 @@ TYPE_INFO_SCOD_BITMASK = 0b111000000000000000
 TYPE_INFO_SCOD_ASCII_BITMASK = 0b000
 TYPE_INFO_SCOD_UTF8_BITMASK = 0b001
 
-logger = logging.getLogger("dlt-transformipy")
-
 
 class Payload(object):
     # List like access to arguments
@@ -82,6 +80,12 @@ class Payload(object):
         )
         if message.standard_header.header_type.use_extended_header:
             self._decodable = message.extended_header.message_info.verbose
+            if not self._decodable:
+                logger.debug(
+                    "Payload of message '{}' is not decodeable yet.".format(
+                        dlt_message_hex
+                    )
+                )
         self._index = 0
 
     def __getitem__(self, index):

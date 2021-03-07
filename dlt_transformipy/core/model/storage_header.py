@@ -15,17 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import logging
 
-from dlt_transformipy.helpers import (
+from dlt_transformipy.core.helpers import (
     hex_str_to_utf8,
     hex_str_to_int32,
     hex_str_to_uint32,
 )
 
 # STORAGE HEADER BYTE SIZES
-STORAGE_HEADER_DLT_PATTERN_BYTE_SIZE = 4
 STORAGE_HEADER_TIMESTAMP_BYTE_SIZE = 8
 STORAGE_HEADER_ECU_ID_BYTE_SIZE = 4
-# TODO: Currently DLT_PATTERN SIZE because it is filtered automatically for every message --> do not filter below (see hex_dlt_message_iterator) and then add the size here as well
 STORAGE_HEADER_BYTE_SIZE = (
     STORAGE_HEADER_TIMESTAMP_BYTE_SIZE + STORAGE_HEADER_ECU_ID_BYTE_SIZE
 )

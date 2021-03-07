@@ -13,9 +13,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import logging
+from dlt_transformipy import logger
 
-from dlt_transformipy.helpers import (
+from dlt_transformipy.core.helpers import (
     isKthBitSet,
     hex_str_to_ascii,
     hex_str_to_utf8,
@@ -44,9 +44,6 @@ STANDARD_HEADER_BYTE_SIZE = (
     + STANDARD_HEADER_SESSION_ID_BYTE_SIZE
     + STANDARD_HEADER_TIMESTAMP_BYTE_SIZE
 )
-
-logger = logging.getLogger("dlt-transformipy")
-logger.setLevel(logging.INFO)
 
 
 class StandardHeader(object):
