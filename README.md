@@ -40,7 +40,8 @@ for message in dlt_file.get_messages():
 
 ## Known limitations
 Currently only verbose DLT messages are supported.
-Additionally, not all Payload data types are yet available. See 'Supported Payload Data Types'
+Additionally, not all Payload data types are yet available.  
+See 'Supported Payload Data Types'
 
 ### Supported Payload Data Types
 - [x] RAWD
