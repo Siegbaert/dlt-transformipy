@@ -38,6 +38,10 @@ for message in dlt_file.get_messages():
     pass     
 ```
 
+## Known limitations
+Currently only verbose DLT messages are supported.
+Additionally, not all Payload data types are yet available. See 'Supported Payload Data Types'
+
 ### Supported Payload Data Types
 - [x] RAWD
 - [x] STRG
@@ -52,7 +56,7 @@ for message in dlt_file.get_messages():
 - [ ] VARI
 - [ ] SCOD
 
-### Backlog
+## Backlog
 - [ ] Full DLT specification support (Non-Verbose messages, all specified payload data types, ...)
 - [ ] Transform to JSON
 - [ ] Offer a non-bulk reading option to iterate over every DLT message without loading the whole DLT file at once
