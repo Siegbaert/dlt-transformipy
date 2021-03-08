@@ -1,18 +1,24 @@
-# This file is part of dlt-transformipy
-# Copyright 2021  Dennis Schwarz
+# MIT License
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Copyright (c) 2021 Dennis Schwarz
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 from dlt_transformipy import logger
 
 from dlt_transformipy.core.model.dlt_message import DLTMessage
@@ -25,7 +31,7 @@ STORAGE_FILE_HEADER_BYTE_SIZE = 4
 DLT_STORAGE_HEADER_IDENTIFIER_HEX = "444c5401"
 
 
-class DLTFile():
+class DLTFile:
     is_storaged_file = False
 
     __dlt_messages = None
@@ -35,21 +41,29 @@ class DLTFile():
         self.__dlt_messages = list()
         self.__dlt_file_path = dlt_file_path
 
+    def read(self):
+        """Reads the whole DLTFile into memory"""
+        dlt_file_descriptor = open(self.__dlt_file_path, "rb")
+        self.is_storaged_file = self._check_if_storage_file(dlt_file_descriptor)
+        for dlt_message_hex in self._hex_dlt_message_iterator(dlt_file_descriptor):
+            if dlt_message_hex and len(dlt_message_hex) > 0:
+                self.__dlt_messages.append(
+                    DLTMessage(dlt_message_hex, self.is_storaged_file)
+                )
+        dlt_file_descriptor.close()
+        logger.info(
+            "Number of DLT-Messages in DLT File {}: {}".format(
+                self.__dlt_file_path, len(self.__dlt_messages)
+            )
+        )
+
     def get_messages(self) -> "list(DLTMessage)":
-        """Get a list of all DLTMessages (reads in the whole DLT file at once --> tough on memory)
+        """Returns a list of all DLTMessages
         :returns: List of all DLTMessages
         :rtype: DLTMessage
         """
         if self.__dlt_messages is None or not len(self.__dlt_messages):
-            dlt_file_descriptor = open(self.__dlt_file_path, "rb")
-            self.is_storaged_file = self._check_if_storage_file(dlt_file_descriptor)
-            self._create_dlt_messages(dlt_file_descriptor)
-            dlt_file_descriptor.close()
-            logger.info(
-                "Number of DLT-Messages in DLT File {}: {}".format(
-                    self.__dlt_file_path, len(self.__dlt_messages)
-                )
-            )
+            self.read()
         return self.__dlt_messages
 
     def clean_up(self):
@@ -63,13 +77,6 @@ class DLTFile():
         # Reset the read-pointer
         dlt_file_descriptor.seek(0)
         return file_start_pattern_hex == DLT_STORAGE_HEADER_IDENTIFIER_HEX
-
-    def _create_dlt_messages(self, dlt_file_descriptor):
-        for dlt_message_hex in self._hex_dlt_message_iterator(dlt_file_descriptor):
-            if dlt_message_hex and len(dlt_message_hex) > 0:
-                self.__dlt_messages.append(
-                    DLTMessage(dlt_message_hex, self.is_storaged_file)
-                )
 
     def _hex_dlt_message_iterator(
         self,

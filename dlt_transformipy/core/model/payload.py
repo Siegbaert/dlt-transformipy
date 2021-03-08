@@ -1,18 +1,24 @@
-# This file is part of dlt-transformipy
-# Copyright 2021  Dennis Schwarz
+# MIT License
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Copyright (c) 2021 Dennis Schwarz
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 from dlt_transformipy import logger
 
 from dlt_transformipy.core.helpers import (
@@ -58,7 +64,7 @@ TYPE_INFO_SCOD_ASCII_BITMASK = 0b000
 TYPE_INFO_SCOD_UTF8_BITMASK = 0b001
 
 
-class Payload():
+class Payload:
     # List like access to arguments
 
     _payload_encoded = None
@@ -143,15 +149,16 @@ class Payload():
 
                     value = None
 
-                    # Check if VARI is set --> Not yet supported!
-                    if type_info_int & TYPE_INFO_VARI_BITMASK:
+                    if (
+                        type_info_int & TYPE_INFO_VARI_BITMASK
+                    ):  # VARI --> Not yet supported!
                         self._arguments.append("[VARI is not supported yet]")
                         logger.debug(
                             "VARI is not supported yet! Skipping this payload."
                         )
                         break
 
-                    if type_info_int & TYPE_INFO_RAW_BITMASK:  # Check if RAW
+                    if type_info_int & TYPE_INFO_RAW_BITMASK:  # RAWD
                         # Extract the length of the actual payload (length without TYPE_INFO)
                         raw_length_bytes = (
                             hex_str_to_uint16(
@@ -168,7 +175,7 @@ class Payload():
                             offset : offset + raw_length_bytes
                         ]
                         offset += raw_length_bytes
-                    elif type_info_int & TYPE_INFO_STRG_BITMASK:  # Check if STRING
+                    elif type_info_int & TYPE_INFO_STRG_BITMASK:  # STRG
 
                         def get_scod(type_info):
                             """Helper function"""
@@ -200,7 +207,7 @@ class Payload():
                             )
                         )  # "-2" to strip the \x00 at the end
                         offset += strg_length_bytes
-                    elif type_info_int & TYPE_INFO_UINT_BITMASK:  # Check if UINT
+                    elif type_info_int & TYPE_INFO_UINT_BITMASK:  # UINT
                         tyle = type_info_int & TYPE_INFO_TYLE_BITMASK
                         if tyle == TYPE_INFO_TYLE_8BIT_BITMASK:
                             value = hex_str_to_uint8(
@@ -228,7 +235,7 @@ class Payload():
                             offset += 16
                         if tyle == TYPE_INFO_TYLE_128BIT_BITMASK:
                             raise TypeError("reading 128BIT values not supported")
-                    elif type_info_int & TYPE_INFO_SINT_BITMASK:  # Check if SINT
+                    elif type_info_int & TYPE_INFO_SINT_BITMASK:  # SINT
                         tyle = type_info_int & TYPE_INFO_TYLE_BITMASK
                         if tyle == TYPE_INFO_TYLE_8BIT_BITMASK:
                             value = hex_str_to_int8(
