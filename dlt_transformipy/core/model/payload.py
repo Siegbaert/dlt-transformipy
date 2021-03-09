@@ -157,19 +157,24 @@ class Payload:
                                 self._payload_encoded
                             )
                         )
-                        logger.debug(
+                        logger.warn(
                             "[Unsupported type: VARI | payload: {}]".format(
                                 self._payload_encoded
                             )
                         )
-                        self._arguments.append(
-                            "[Unsupported type: VARI | payload: {}]".format(
-                                self._payload_encoded
-                            )
-                        )
-                        continue
+                        continue  # IF VARI, DO NOT TRY TO PARSE THIS ARGUMENT FURTHER
 
-                    if type_info_int & TYPE_INFO_RAW_BITMASK:  # RAWD
+                    if type_info_int & TYPE_INFO_BOOL_BITMASK:  # BOOL
+                        # DLT Spec: BOOL shall always be 8 bit, no further checks here
+                        value = (
+                            hex_str_to_uint8(
+                                self._payload_encoded[offset : offset + 2],
+                                big_endian=self._big_endian,
+                            )
+                            > 0
+                        )
+                        offset += 2
+                    elif type_info_int & TYPE_INFO_RAW_BITMASK:  # RAWD
                         # Extract the length of the actual payload (length without TYPE_INFO)
                         raw_length_bytes = (
                             hex_str_to_uint16(
@@ -226,25 +231,25 @@ class Payload:
                                 big_endian=self._big_endian,
                             )
                             offset += 2
-                        if tyle == TYPE_INFO_TYLE_16BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_16BIT_BITMASK:
                             value = hex_str_to_uint16(
                                 self._payload_encoded[offset : offset + 4],
                                 big_endian=self._big_endian,
                             )
                             offset += 4
-                        if tyle == TYPE_INFO_TYLE_32BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_32BIT_BITMASK:
                             value = hex_str_to_uint32(
                                 self._payload_encoded[offset : offset + 8],
                                 big_endian=self._big_endian,
                             )
                             offset += 8
-                        if tyle == TYPE_INFO_TYLE_64BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_64BIT_BITMASK:
                             value = hex_str_to_uint64(
                                 self._payload_encoded[offset : offset + 16],
                                 big_endian=self._big_endian,
                             )
                             offset += 16
-                        if tyle == TYPE_INFO_TYLE_128BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_128BIT_BITMASK:
                             raise ValueError("reading 128-bit values not supported")
                     elif type_info_int & TYPE_INFO_SINT_BITMASK:  # SINT
                         tyle = type_info_int & TYPE_INFO_TYLE_BITMASK
@@ -254,32 +259,30 @@ class Payload:
                                 big_endian=self._big_endian,
                             )
                             offset += 2
-                        if tyle == TYPE_INFO_TYLE_16BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_16BIT_BITMASK:
                             value = hex_str_to_int16(
                                 self._payload_encoded[offset : offset + 4],
                                 big_endian=self._big_endian,
                             )
                             offset += 4
-                        if tyle == TYPE_INFO_TYLE_32BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_32BIT_BITMASK:
                             value = hex_str_to_int32(
                                 self._payload_encoded[offset : offset + 8],
                                 big_endian=self._big_endian,
                             )
                             offset += 8
-                        if tyle == TYPE_INFO_TYLE_64BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_64BIT_BITMASK:
                             value = hex_str_to_int64(
                                 self._payload_encoded[offset : offset + 16],
                                 big_endian=self._big_endian,
                             )
                             offset += 16
-                        if tyle == TYPE_INFO_TYLE_128BIT_BITMASK:
+                        elif tyle == TYPE_INFO_TYLE_128BIT_BITMASK:
                             raise ValueError("reading 128-bit values not supported")
                     else:
                         unsupported_type = None
 
-                        if type_info_int & TYPE_INFO_BOOL_BITMASK:
-                            unsupported_type = "BOOL"
-                        elif type_info_int & TYPE_INFO_FLOAT_BITMASK:
+                        if type_info_int & TYPE_INFO_FLOAT_BITMASK:
                             unsupported_type = "FLOAT"
                         elif type_info_int & TYPE_INFO_ARRAY_BITMASK:
                             unsupported_type = "ARAY"

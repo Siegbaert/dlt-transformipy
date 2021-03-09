@@ -48,7 +48,7 @@ See 'Supported Payload Data Types'
 - [x] STRG
 - [x] UINT (max 64 Bit)
 - [x] SINT (max 64 Bit)
-- [ ] BOOL
+- [x] BOOL
 - [ ] FLOA
 - [ ] ARAY
 - [ ] FIXP
