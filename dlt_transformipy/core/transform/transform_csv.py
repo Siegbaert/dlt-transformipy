@@ -72,11 +72,7 @@ def transform(dlt_file, output_file_path, separator=None):
             # mcnt
             csv_line_result.append(str(message.standard_header.message_counter))
             # ecuId
-            csv_line_result.append(
-                str(message.storage_header.ecu_id)
-                if dlt_file.is_storaged_file
-                else str(message.standard_header.ecu_id)
-            )
+            csv_line_result.append(str(message.storage_header.ecu_id))
             # apid
             csv_line_result.append(
                 str(message.extended_header.apid) if has_extended_header else ""

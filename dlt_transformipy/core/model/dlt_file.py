@@ -32,8 +32,6 @@ DLT_STORAGE_HEADER_IDENTIFIER_HEX = "444c5401"
 
 
 class DLTFile:
-    is_storaged_file = False
-
     __dlt_messages = None
     __dlt_file_path = None
 
@@ -44,13 +42,18 @@ class DLTFile:
     def read(self):
         """Reads the whole DLTFile into memory"""
         dlt_file_descriptor = open(self.__dlt_file_path, "rb")
-        self.is_storaged_file = self._check_if_storage_file(dlt_file_descriptor)
+
+        if not self._check_if_storage_file(dlt_file_descriptor):
+            raise TypeError(
+                "Provided DLT/binary file is not a storaged DLT file (DLT Storage Pattern was not found)"
+            )
+
         for dlt_message_hex in self._hex_dlt_message_iterator(dlt_file_descriptor):
             if dlt_message_hex and len(dlt_message_hex) > 0:
-                self.__dlt_messages.append(
-                    DLTMessage(dlt_message_hex, self.is_storaged_file)
-                )
+                self.__dlt_messages.append(DLTMessage(dlt_message_hex))
+
         dlt_file_descriptor.close()
+
         logger.info(
             "Number of DLT-Messages in DLT File {}: {}".format(
                 self.__dlt_file_path, len(self.__dlt_messages)
