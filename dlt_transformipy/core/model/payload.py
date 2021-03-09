@@ -152,11 +152,22 @@ class Payload:
                     if (
                         type_info_int & TYPE_INFO_VARI_BITMASK
                     ):  # VARI --> Not yet supported!
-                        self._arguments.append("[VARI is not supported yet]")
-                        logger.debug(
-                            "VARI is not supported yet! Skipping this payload."
+                        self._arguments.append(
+                            "[Unsupported type: VARI | payload: {}]".format(
+                                self._payload_encoded
+                            )
                         )
-                        break
+                        logger.debug(
+                            "[Unsupported type: VARI | payload: {}]".format(
+                                self._payload_encoded
+                            )
+                        )
+                        self._arguments.append(
+                            "[Unsupported type: VARI | payload: {}]".format(
+                                self._payload_encoded
+                            )
+                        )
+                        continue
 
                     if type_info_int & TYPE_INFO_RAW_BITMASK:  # RAWD
                         # Extract the length of the actual payload (length without TYPE_INFO)
@@ -234,7 +245,7 @@ class Payload:
                             )
                             offset += 16
                         if tyle == TYPE_INFO_TYLE_128BIT_BITMASK:
-                            raise TypeError("reading 128BIT values not supported")
+                            raise ValueError("reading 128-bit values not supported")
                     elif type_info_int & TYPE_INFO_SINT_BITMASK:  # SINT
                         tyle = type_info_int & TYPE_INFO_TYLE_BITMASK
                         if tyle == TYPE_INFO_TYLE_8BIT_BITMASK:
@@ -262,12 +273,33 @@ class Payload:
                             )
                             offset += 16
                         if tyle == TYPE_INFO_TYLE_128BIT_BITMASK:
-                            raise TypeError("reading 128BIT values not supported")
+                            raise ValueError("reading 128-bit values not supported")
                     else:
-                        # Reset the arguments to NONE if parsing could not be done
-                        self._arguments.append("[Unsupported type]")
-                        logger.debug("Unsupported type {}".format(type_info_int))
-                        break
+                        unsupported_type = None
+
+                        if type_info_int & TYPE_INFO_BOOL_BITMASK:
+                            unsupported_type = "BOOL"
+                        elif type_info_int & TYPE_INFO_FLOAT_BITMASK:
+                            unsupported_type = "FLOAT"
+                        elif type_info_int & TYPE_INFO_ARRAY_BITMASK:
+                            unsupported_type = "ARAY"
+                        elif type_info_int & TYPE_INFO_FIXP_BITMASK:
+                            unsupported_type = "FIXP"
+                        elif type_info_int & TYPE_INFO_VARI_BITMASK:
+                            unsupported_type = "VARI"
+                        elif type_info_int & TYPE_INFO_TRAI_BITMASK:
+                            unsupported_type = "TRAI"
+                        elif type_info_int & TYPE_INFO_STRU_BITMASK:
+                            unsupported_type = "STRU"
+
+                        value = "[Unsupported type: {} | payload: {}]".format(
+                            unsupported_type, self._payload_encoded
+                        )
+                        logger.debug(
+                            "Unsupported type {} | payload: {}".format(
+                                unsupported_type, self._payload_encoded
+                            )
+                        )
 
                     # Add the parsed value to list of arguments
                     self._arguments.append(value)

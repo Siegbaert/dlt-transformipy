@@ -1,12 +1,12 @@
 # dlt-transformipy [![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/Siegbaert/dlt-transformipy/main/LICENSE)
 
 
-dlt-transformipy is a pure python implementation which features the transformation of Storaged DLT files (see: [Diagnostic, Log and Trace Protocol Specification v1.0](https://www.autosar.org/fileadmin/user_upload/standards/foundation/1-0/AUTOSAR_PRS_DiagnosticLogAndTraceProtocol.pdf)) into other formats (e.g. CSV).
+dlt-transformipy is a pure python implementation which features the transformation of storaged DLT files (see: [Diagnostic, Log and Trace Protocol Specification v1.0](https://www.autosar.org/fileadmin/user_upload/standards/foundation/1-0/AUTOSAR_PRS_DiagnosticLogAndTraceProtocol.pdf)) into other formats (e.g. CSV).
 
 
 ## Getting Started
 
-### Set-Up python virual environment
+### Set-Up python virtual environment
 ```sh
 make setup
 ```
@@ -55,7 +55,6 @@ See 'Supported Payload Data Types'
 - [ ] TRAI
 - [ ] STRU
 - [ ] VARI
-- [ ] SCOD
 
 ## Backlog
 - [ ] Full DLT specification support (Non-Verbose messages, all specified payload data types, ...)
