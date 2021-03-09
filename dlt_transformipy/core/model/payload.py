@@ -157,12 +157,12 @@ class Payload:
                                 self._payload_encoded
                             )
                         )
-                        logger.warn(
+                        logger.warning(
                             "[Unsupported type: VARI | payload: {}]".format(
                                 self._payload_encoded
                             )
                         )
-                        continue  # IF VARI, DO NOT TRY TO PARSE THIS ARGUMENT FURTHER
+                        break  # IF VARI, DO NOT TRY TO PARSE THIS ARGUMENT FURTHER
 
                     if type_info_int & TYPE_INFO_BOOL_BITMASK:  # BOOL
                         # DLT Spec: BOOL shall always be 8 bit, no further checks here
@@ -282,27 +282,25 @@ class Payload:
                     else:
                         unsupported_type = None
 
-                        if type_info_int & TYPE_INFO_FLOAT_BITMASK:
+                        if type_info_int & TYPE_INFO_FLOAT_BITMASK:  # FLOA
                             unsupported_type = "FLOAT"
-                        elif type_info_int & TYPE_INFO_ARRAY_BITMASK:
+                        elif type_info_int & TYPE_INFO_ARRAY_BITMASK:  # ARAY
                             unsupported_type = "ARAY"
-                        elif type_info_int & TYPE_INFO_FIXP_BITMASK:
+                        elif type_info_int & TYPE_INFO_FIXP_BITMASK:  # FIXP
                             unsupported_type = "FIXP"
-                        elif type_info_int & TYPE_INFO_VARI_BITMASK:
+                        elif type_info_int & TYPE_INFO_VARI_BITMASK:  # VARI
                             unsupported_type = "VARI"
-                        elif type_info_int & TYPE_INFO_TRAI_BITMASK:
+                        elif type_info_int & TYPE_INFO_TRAI_BITMASK:  # TRAI
                             unsupported_type = "TRAI"
-                        elif type_info_int & TYPE_INFO_STRU_BITMASK:
+                        elif type_info_int & TYPE_INFO_STRU_BITMASK:  # STRU
                             unsupported_type = "STRU"
 
-                        value = "[Unsupported type: {} | payload: {}]".format(
-                            unsupported_type, self._payload_encoded
-                        )
-                        logger.debug(
+                        logger.warning(
                             "Unsupported type {} | payload: {}".format(
                                 unsupported_type, self._payload_encoded
                             )
                         )
+                        break
 
                     # Add the parsed value to list of arguments
                     self._arguments.append(value)
